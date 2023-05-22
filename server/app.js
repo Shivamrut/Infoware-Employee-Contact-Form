@@ -2,7 +2,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const Dbservice = require('./db');
-
+const cors = require('cors');
 
 // configuring modules
 dotenv.config();
@@ -13,7 +13,7 @@ const env = process.env;
 // express config
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-
+app.use(cors());
 
 // CREATE
 // app.post('/insert', (req,res)=>{
@@ -31,25 +31,20 @@ app.use(express.urlencoded({extended:false}));
 
 // // READ
 app.get('/getData',(req,res)=>{
-    // console.log('test');
-    res.send('Success');
+    const db = Dbservice.getSingleInstance();
+    const result = db.getAllData();
+    result
+    .then((data) => {
+        res.json({
+            data:data
+        });
+        // console.log(data);
+        
+    }).catch((err) => {
+        console.log('Error in /getData');
+        console.log(err);
+    });
 })
-
-// app.get('/search/:name',(req,res)=>{
-
-//     const {name} = req.params;
-//     const db = Dbservice.getDbServiceInstance();
-//     const result = db.searchName(name);
-
-//     result 
-//     .then(data => res.json({
-//         data : data
-//     }))
-//     .catch(err => {
-//         console.log('Error in Searching name');
-//     })
-// })
-
 
 
 // // UPDATE
@@ -68,22 +63,22 @@ app.get('/getData',(req,res)=>{
 // })
 
 
-// // edit
-// app.patch('/edit',(req,res)=>{
-//     // console.log(req.body);
-//     const body = req.body;
-//     // console.log('body: ', body);
-//     const {name, id} = req.body;
-//     console.log(name,id);
-//     const db = Dbservice.getDbServiceInstance();
-//     const result = db.editName(id,name);
-//     result 
-//     .then(data => res.json({
-//         success : data
-//     }))
-//     .catch(err=>console.log('Error in patch edit : ', err));
+// edit
+app.patch('/editName',(req,res)=>{
+    // console.log(req.body);
+    const body = req.body;
+    // console.log('body: ', body);
+    const {name, id} = req.body;
+    console.log(name,id);
+    const db = Dbservice.getSingleInstance();
+    const result = db.editName(id,name);
+    result 
+    .then(data => res.json({
+        success : data
+    }))
+    .catch(err=>console.log('Error in patch edit : ', err));
     
-// })
+})
 
 
 
