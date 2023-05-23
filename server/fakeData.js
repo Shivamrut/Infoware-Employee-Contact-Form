@@ -4,8 +4,8 @@ const Dbservice = require('./db');
 const dataNo = 100;
 const db = Dbservice.getSingleInstance();
 const data = [];
-for (let i=0;i<dataNo;i++)
-{
+for (let i = 0; i < dataNo; i++) {
+
     const employeeFullName = faker.company.companyName();
     const jobTitle = faker.name.jobTitle();
     const phoneNumber = faker.phone.phoneNumber();
@@ -37,17 +37,16 @@ for (let i=0;i<dataNo;i++)
         secondary_emergency_relationship: secondaryEmergencyRelationship,
         timestamp: timestamp
     };
-    // console.log(employeeData);
     data.push(employeeData);
-    
+
 }
 
 const result = db.createContact(data);
-    result
+result
     .then((data) => {
         console.log('success');
         console.log(data);
-        
+
     }).catch((err) => {
         console.log(err);
     });

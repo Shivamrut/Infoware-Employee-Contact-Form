@@ -55,7 +55,7 @@ async function fetchSpreadsheetData() {
       });
       // console.log(jsonData);
       return jsonData;
-    }  else {
+    } else {
       console.log('No data found.');
       return {};
     }

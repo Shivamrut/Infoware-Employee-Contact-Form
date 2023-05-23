@@ -5,6 +5,8 @@ const Dbservice = require('./db');
 const cors = require('cors');
 const getSheetData = require('./gspreadsheet');
 
+
+
 // configuring modules
 dotenv.config();
 const app = express();
@@ -17,40 +19,36 @@ app.use(express.urlencoded({extended:false}));
 app.use(cors());
 
 
-
-
 // READ
 
 app.get('/getData',(req,res)=>{
     const db = Dbservice.getSingleInstance();
     const sheetData = getSheetData();
+
     sheetData
     .then(data=>{
-        // console.log(data);
         const sendData = db.createContact(data);
         sendData
         .then(d => {
-            // console.log('d: ',d);
             const result = db.getAllData();
             result
             .then((data) => {
                 res.json({
                     data:data
                 });
-                // console.log(data);
                 
             }).catch((err) => {
                 console.log('Error in /getData');
                 console.log(err);
             });
+            })
+            .catch(err=>{
+            console.log(err);
         })
     })
-    
     .catch(err=>{
         console.log('Error in getting sheet data');
     })
-    
-    
 })
 
 app.post('/completeDetails/:id',(req,res)=>{
@@ -110,10 +108,8 @@ app.patch('/update',(req,res)=>{
             success : data
         })
     }
-        
     )
     .catch(err=>console.log('Error in patch edit : ', err));
-    
 })
 
 

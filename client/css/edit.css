@@ -1,0 +1,35 @@
+#editBox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#editInput {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+}
+
+#getEmployee {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    display: none;
+    text-align: left;
+
+
+}
+
+#getEmployee p {
+
+    padding: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+#updateEmployee {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    display: none;
+
+}

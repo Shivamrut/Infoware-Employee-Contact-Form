@@ -1,0 +1,22 @@
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.pagination button {
+  padding: 2px 3px;
+  margin-right: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 4px;
+  border: 1px solid #ddd;
+}

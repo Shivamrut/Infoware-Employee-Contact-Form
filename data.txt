@@ -1,1 +1,67 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 formplus_form_link=https://www.formpl.us/form/4562314028777472
+google_spread_sheet_data_link=https://docs.google.com/spreadsheets/d/1doF3_1VhHOLCVw-7ofb2M6tz-nxbZBSVrEF-p-zRv1g/edit#gid=319105022
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+Database design and queries
+
+Table Details
+id          --> primary key
+full_name  
+job_title  
+email  
+address  
+city  
+state  
+time_stamp  --> used to identify duplicate data
+
+Table Contact 
+id          --> primary key
+employee_id   --> foreign key referenced with details table id
+phone_number 
+
+Table emergencyContact
+id            --> primary key
+employee_id   --> foreign key referenced with details table id
+name 
+phone_number 
+relationship 
+priority      --> primary if 1, else secondary
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+Queries
+
+CREATE DATABASE Employee;
+
+CREATE TABLE Employee.details (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  full_name VARCHAR(255),
+  job_title VARCHAR(255),
+  email VARCHAR(255),
+  address VARCHAR(255),
+  city VARCHAR(255),
+  state VARCHAR(255),
+  time_stamp VARCHAR(255)
+);
+
+CREATE TABLE Employee.contact (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  employee_id INT,
+  phone_number VARCHAR(255),
+  FOREIGN KEY (employee_id) REFERENCES Employee.details(id)
+);
+
+CREATE TABLE Employee.emergencyContact (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  employee_id INT,
+  name VARCHAR(255),
+  phone_number VARCHAR(255),
+  relationship VARCHAR(255),
+  priority INT,
+  FOREIGN KEY (employee_id) REFERENCES Employee.details(id)
+);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
