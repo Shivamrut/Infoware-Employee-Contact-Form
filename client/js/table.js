@@ -1,8 +1,10 @@
-
+// Get important elements to be handled
 const table = document.getElementById('table-body');
 const fullTable = document.getElementById('Table');
 const showBtn = document.getElementById('show-list-btn');
 var data;
+
+// When the page is loaded, retrieve data from the database to inject into table
 document.addEventListener('DOMContentLoaded', async function (event) {
 
   fetch('http://localhost:3000/getData')
@@ -17,16 +19,22 @@ document.addEventListener('DOMContentLoaded', async function (event) {
     })
 });
 
+
+// When clicked show the hidded table 
 showBtn.addEventListener('click', () => {
   Table.style.display = 'block';
 })
 
+
+// Get elements to implement pagination
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const pageInfo = document.getElementById('pageInfo');
 const itemsPerPage = 2; // Number of items to display per page
 let currentPage = 1;
 
+
+// Main function that displays the employee list
 function generateTable(data, currentPage, itemsPerPage) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;

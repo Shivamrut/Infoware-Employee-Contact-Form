@@ -21,7 +21,8 @@ app.use(cors());
 
 // READ
 
-app.get('/getData',(req,res)=>{
+// This endpoint handles retrieval of data from google spreadsheets and creation of employee in database
+app.get('/getData',(req,res)=>{                 
     const db = Dbservice.getSingleInstance();
     const sheetData = getSheetData();
 
@@ -51,6 +52,8 @@ app.get('/getData',(req,res)=>{
     })
 })
 
+
+// This endpoint is used to retrieve complete details of the employee from the database
 app.post('/completeDetails/:id',(req,res)=>{
     const id = req.params.id;
     const db = Dbservice.getSingleInstance();
@@ -69,6 +72,8 @@ app.post('/completeDetails/:id',(req,res)=>{
     })
 })
 
+
+// This endpoint was used to get authorization code for google api OAuth 2.0
 // app.get('/oauth', (req, res) => {
 //     const authorizationCode = req.query.code;
 //     const state = req.query.state;
@@ -82,6 +87,7 @@ app.post('/completeDetails/:id',(req,res)=>{
 // UPDATE
 
 // delete
+// This endpoint recieves id of the employee to be deleted and handles deletion.
 app.delete('/delete/:id',(req,res)=>{
     console.log(req.params);
     const id = req.params.id;
@@ -96,6 +102,7 @@ app.delete('/delete/:id',(req,res)=>{
 
 
 // edit
+// This endpoint is used to update the name of existing employee, can be implemented to update other fields as well
 app.patch('/update',(req,res)=>{
     const {name, id} = req.body;
     console.log(req.body);
@@ -116,5 +123,5 @@ app.patch('/update',(req,res)=>{
 
 // server
 app.listen(env.PORT,env.HOST, ()=>{
-    console.log(`App is running at http://${env.HOST}:${env.PORT}/getAll`);
+    console.log(`App is running at http://${env.HOST}:${env.PORT}`);
 })

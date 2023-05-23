@@ -1,8 +1,9 @@
+// get the button elements from the page
 const updateBtn = document.getElementById('update-btn');
 const deleteBtn = document.getElementById('delete-btn');
 const getBtn = document.getElementById('get-btn');
 
-
+// When delete button is clicked
 deleteBtn.addEventListener('click', () => {
     const id = document.getElementById('id');
     let idVal = id.value;
@@ -15,10 +16,13 @@ deleteBtn.addEventListener('click', () => {
         getBox.style.display = 'none';
         const updateBox = document.getElementById('updateEmployee');
         updateBox.style.display = 'none';
+        // Send id of element to be deleted
         deleteRow(idVal);
     }
 
 })
+
+// When update button is clicked
 updateBtn.addEventListener('click', function (event) {
 
     const id = document.getElementById('id');
@@ -33,6 +37,7 @@ updateBtn.addEventListener('click', function (event) {
         const getBox = document.getElementById('getEmployee');
         getBox.style.display = 'none';
         const submitBtn = document.getElementById('update-submit-btn');
+
         submitBtn.addEventListener('click', () => {
             const name = document.getElementById('name');
             let nameVal = name.value;
@@ -41,12 +46,15 @@ updateBtn.addEventListener('click', function (event) {
                 alert('Enter new name please');
             }
             else {
+                // Send id and new name of the employee to be updated
                 updateName(idVal, nameVal);
 
             }
         })
     }
 })
+
+// When get employee details button is clicked
 getBtn.addEventListener('click', function (event) {
     const id = document.getElementById('id');
     let idVal = id.value;
@@ -59,15 +67,17 @@ getBtn.addEventListener('click', function (event) {
         getBox.style.display = 'initial';
         const updateBox = document.getElementById('updateEmployee');
         updateBox.style.display = 'none';
+        // Send id of the employee whose complete details are to be retrieved
         fullDetails(idVal);
     }
 
 
 })
 
-
-
+// Gives fetch call to the /delete endpoint
 function deleteRow(id) {
+
+    // Passing id as request parameter
     fetch(`http://127.0.0.1:3000/delete/${id}`, {
         method: "DELETE",
         headers: { 'Content-type': 'application/json' },
@@ -87,12 +97,15 @@ function deleteRow(id) {
         .catch('Error in deleteRow');
 }
 
+// Gives fetch call to /update endpoint
 function updateName(id, name) {
+
+    // Create js object to send request body
     const obj = {
         id: id,
         name: name
     };
-    console.log(obj);
+
     fetch(`http://127.0.0.1:3000/update`, {
         method: "PATCH",
         headers: { 'Content-type': 'application/json' },
@@ -112,7 +125,11 @@ function updateName(id, name) {
         .catch('Error in updateName');
 }
 
+// Fetch call to /completeDetails endpoint
+
 function fullDetails(id) {
+
+    // Passing id as request parameter
     fetch(`http://127.0.0.1:3000/completeDetails/${id}`, {
         method: 'POST'
     })
@@ -123,6 +140,9 @@ function fullDetails(id) {
         })
 }
 
+
+// This function handles the data recieved from backend about the single employee whose complete details are to be known
+// Displays data in the form of key value pairs
 function displayGetDetails(data) {
     const getBox = document.getElementById('getEmployee');
 
@@ -140,5 +160,4 @@ function displayGetDetails(data) {
     Secondary Emergency Contact:${sec_name} <br>
     Relationship:${sec_rel} <br>
     Phone: ${sec_phone}<br></p>`
-    console.log(data[0]);
 }

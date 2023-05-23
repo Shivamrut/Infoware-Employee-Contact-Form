@@ -1,4 +1,5 @@
-let instance = null;
+// Create null instance for initial Dbservice class object
+let instance = null;           
 
 const mysql = require('mysql');
 
@@ -17,12 +18,16 @@ con.connect(function (err) {
 
 });
 
+
+// Using OOPs based techniques to handle queries
 class Dbservice {
+    // This method makes sure there is only one instance on this class everywhere
     static getSingleInstance() {
         return instance ? instance : new Dbservice();
 
     }
 
+    // This method retreives required data field for the employee table
     async getAllData() {
         try {
             const response = await new Promise((resolve, rej) => {
@@ -54,7 +59,9 @@ class Dbservice {
         }
     }
 
+    // This method is used to create employee and add details in all three tables
     async createContact(data) {
+        // data is an array of js objects
         try {
             const response = await new Promise((resolve, reject) => {
                 data.forEach(async (item) => {
@@ -73,11 +80,12 @@ class Dbservice {
                         secondary_emergency_relationship,
                         timestamp } = item;
 
-
-                    const duplicate = await this.checkDuplicate(timestamp);
-
+                    // Check if a duplicate is present by comparing timestamps. Prevents repeated data generation of already existing data from the spreadsheet
+                    const duplicate = await this.checkDuplicate(timestamp); 
+                    // If not a duplicate it return true
 
                     if (duplicate) {
+                        // First add details to details table
                         let id;
                         let query = `INSERT INTO details (full_name, job_title, email, address, city, state,time_stamp)
                             VALUES (?,?,?,?,?,?,?);`
@@ -87,6 +95,9 @@ class Dbservice {
                                 reject(new Error(err.message));
                             }
                             else {
+
+                                // If no error found in details table add data to contact and emergencyContact table
+
                                 id = result.insertId;
                                 query = `INSERT INTO contact (employee_id, phone_number)VALUES (?, ?);`
 
@@ -112,7 +123,6 @@ class Dbservice {
                                     }
                                     else {
                                         console.log('Added to emergencyContacts');
-                                        // console.log(result);
                                     }
                                 })
                             }
@@ -131,6 +141,7 @@ class Dbservice {
 
     }
 
+    // This method implements the code to check if a duplicate data is being added by comparing the timestamps
     async checkDuplicate(stamp) {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -156,6 +167,10 @@ class Dbservice {
         }
     }
 
+    // This method implements code to delete the data from all three tables
+    // First contact table data is deleted
+    // Then emergencyContact table data is deleted 
+    // Finally Details table data is deleted so that there is no foreign key dependency error
     async deleteRow(id) {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -183,6 +198,7 @@ class Dbservice {
         }
     }
 
+    // This method deletes data from emergencyContact table
     async deleteEmergencyContact(id) {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -197,7 +213,7 @@ class Dbservice {
                 })
             })
             if (response >= 1) {
-                this.deleteDetails(id);
+                this.deleteDetails(id); 
             }
             else {
                 return false;
@@ -208,6 +224,8 @@ class Dbservice {
             return false;
         }
     }
+
+    // This method deletes data from details table
     async deleteDetails(id) {
         try {
             // console.log('delete id: ',id);
@@ -219,12 +237,11 @@ class Dbservice {
                     }
                     else {
 
-                        resolve(result.affectedRows);
+                        resolve('Deleted Details Table Data');
                     }
                 })
             })
-            console.log('res :', response == 1);
-            return response == 1;
+            return response;
         }
         catch (err) {
             console.log('Error deleting row: ', err);
@@ -232,6 +249,8 @@ class Dbservice {
         }
     }
 
+    // This method implements code to update name of existing employee
+    // This method can be changed according to needs of updating the required field
     async editName(id, name) {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -253,7 +272,7 @@ class Dbservice {
         }
     }
 
-
+    // This method retrieves complete details of the employee whose id is provided
     async getCompleteDetails(id) {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -282,7 +301,7 @@ class Dbservice {
                     emergencyContact e ON d.id = e.employee_id AND e.priority = 1
                     LEFT JOIN
                     emergencyContact ec ON d.id = ec.employee_id AND ec.priority = 2 where d.id=?;`;
-                    
+
                 con.query(query, [id], (err, result) => {
                     if (err) {
                         reject(new Error(err.message));
@@ -301,4 +320,6 @@ class Dbservice {
     }
 }
 
+
+// Exporting this class so that it can be used across different files
 module.exports = Dbservice;
